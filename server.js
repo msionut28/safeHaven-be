@@ -3,7 +3,9 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config';
-import { reviewSchema } from './schemas/reviewSchema.js'
+import { userSchema } from './schemas/userSchema.js';
+import { userRegister } from './ctrls/userCreate.js'
+import { reviewSchema } from './schemas/reviewSchema.js';
 import { addReview, getReview } from './ctrls/reviewFunctions.js';
 import { authenticateChat, chatLogin } from './ctrls/chatEngine.js';
 // import Reviews from './models/review.js'; 
@@ -13,15 +15,21 @@ const app = express()
 app.use(express.json());
 const port = process.env.PORT || 4000
 app.use(cors({ origin: true }));
+app.use(bodyParser.json()) 
 app.use(express.json())
-app.listen(port, () => { console.log(`Server listening on port: ${port}🚀 ` ); })
+
 
 
 //*DATABASE CONNECTION AND SETTINGS 
-const safeHaven = mongoose.connect(process.env.DATABASE_URL)
+ mongoose.connect(process.env.DATABASE_URL)
+ .then(() => {
+    console.log('CONNECTED TO THE DATABASE 🖥');
+    app.listen(port, () => { console.log(`Server listening on port: ${port} 🚀 ` ); })
+ })
 
-// Schemas for Review and other potential models 
-const Reviews = mongoose.model("Review", reviewSchema);
+//* MODELS
+const Reviews = mongoose.model("Review", reviewSchema)
+const userAdded = mongoose.model("User", userSchema)
 
 //* Reviews Endpoints
 app.post("/AddReview", async (req, res) => {
@@ -43,3 +51,7 @@ app.post("/login", async (req, res) => {
 });
 
 //*USER REGISTRATION
+
+app.post("/register", async (req, res) => {
+    userRegister(userAdded, req, res)
+})
