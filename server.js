@@ -20,6 +20,41 @@ const CHAT_ENGINE_PRIVATE_KEY = "1e73c74e-6025-4dd8-a0ac-6fe0ef38495d";
 //*DATABASE CONNECTION AND SETTINGS 
 const safeHaven = mongoose.connect(process.env.DATABASE_URL)
 
+// Schemas for Review and other potential models 
+
+const reviewSchema = new mongoose.Schema({
+    venue: String,
+    review: String,
+    inclusivity: Number,
+    safety: Number,
+    date: Date,
+    user: String,
+  });
+
+  const Reviews = mongoose.model("Review", reviewSchema);
+
+// review post method
+
+app.post("/AddReview", async (req, res) => {
+    const email = req.body.email;
+    try {
+      const data = req.body;
+        
+      const review = new Reviews({
+        
+        venue: data.venue,
+        review: data.review,
+        inclusivity: data.inclusivity,
+        safety: data.safety,
+        date: data.date,
+      });
+    } catch (err) {
+        console.log("ERROR MESSAGE HERE ->", err.message);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    });
+
+
 //Endpoints for chat Engine .io
 
 app.post("/authenticate", async (req, res) => {
