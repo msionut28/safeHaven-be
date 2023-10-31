@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config';
-
+import Reviews from './models/review.js';
 //*APP SETUP
 const app = express()
 app.use(express.json());
@@ -64,3 +64,15 @@ app.post("/login", async (req, res) => {
         return res.status(e.status || 500).json(e);
     }
 });
+
+// Fetch reviews for a specific venue
+app.get("/GetReviews", async (req, res) => {
+    const { venue } = req.query;
+    try {
+      const reviews = await Reviews.find({ venue });
+      res.status(200).json(reviews);
+    } catch (err) {
+      console.log("error", err.message);
+      res.status(500).json({ error: "Internal error" });
+    }
+  });
