@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config()
+
 export async function authenticateChat (req, res){
     const { username } = req.body;
     try {
