@@ -8,6 +8,7 @@ import { userRegister } from './ctrls/userCreate.js'
 import { reviewSchema } from './schemas/reviewSchema.js';
 import { addReview, getReview } from './ctrls/reviewFunctions.js';
 import { authenticateChat, chatLogin } from './ctrls/chatEngine.js';
+import { loginFunction } from './ctrls/userLogin.js';
 // import Reviews from './models/review.js'; 
 
 //*APP SETUP
@@ -76,4 +77,8 @@ app.post("/login", async (req, res) => {
 
 app.post("/register", async (req, res) => {
     userRegister(userAdded, req, res)
+})
+
+app.post("/login/credential", async(req, res) => {
+    loginFunction(req, res, userAdded)
 })
