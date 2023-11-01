@@ -3,7 +3,6 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config';
-import Reviews from './models/review.js';
 //*APP SETUP
 const app = express()
 app.use(express.json());
