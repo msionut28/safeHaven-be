@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config';
+import { individualUser } from './ctrls/individualUser.js';
 import { userSchema } from './schemas/userSchema.js';
 import { userRegister } from './ctrls/userCreate.js'
 import { reviewSchema } from './schemas/reviewSchema.js';
@@ -47,26 +48,7 @@ app.get("/GetReviews", async (req, res) => {
 //Endpoints for chat Engine .io
 
 app.post("/authenticate", async (req, res) => {
-    const { username } = req.body;
-    try {
-        const response = await fetch('https://api.chatengine.io/users/', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'PRIVATE-KEY': CHAT_ENGINE_PRIVATE_KEY
-            },
-            body: JSON.stringify({
-                username: username,
-                secret: username,
-                first_name: username
-            })
-        });
-        
-        const data = await response.json();
-        return res.status(response.status).json(data);
-    } catch (e) {
-        return res.status(e.status || 500).json(e);
-    }
+    authenticateChat(req,res)
 });
 
 app.post("/login", async (req, res) => {
@@ -81,4 +63,8 @@ app.post("/register", async (req, res) => {
 
 app.post("/login/credential", async(req, res) => {
     loginFunction(req, res, userAdded)
+})
+
+app.get("/user/:id", async (req, res) => {
+    individualUser(userAdded, req, res)
 })
