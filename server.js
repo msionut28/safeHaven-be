@@ -10,6 +10,10 @@ import { reviewSchema } from './schemas/reviewSchema.js';
 import { addReview, getReview } from './ctrls/reviewFunctions.js';
 import { authenticateChat, chatLogin } from './ctrls/chatEngine.js';
 import { loginFunction } from './ctrls/userLogin.js';
+import { addMarker } from './ctrls/markerFunction.js';
+import { markerSchema } from './schemas/markers.js';
+import { deleteMarker } from './ctrls/markerFunction.js';
+import { getMarker } from './ctrls/markerFunction.js';
 // import Reviews from './models/review.js'; 
 
 //*APP SETUP
@@ -35,6 +39,7 @@ const CHAT_ENGINE_PROJECT_ID= "4c61fca9-e537-418a-a97c-5759ecafb802"
 //* MODELS
 const Reviews = mongoose.model("Review", reviewSchema)
 const userAdded = mongoose.model("User", userSchema)
+const Marker = mongoose.model('Marker', markerSchema);
 
 //* Reviews Endpoints
 app.post("/AddReview", async (req, res) => {
@@ -67,4 +72,16 @@ app.post("/login/credential", async(req, res) => {
 
 app.get("/user/:id", async (req, res) => {
     individualUser(userAdded, req, res)
+})
+
+//Map Markers Endpoints
+app.post("/markers", async (req, res) => {
+    addMarker(Marker,req, res)
+})
+app.get("/markers", async (req, res) => {
+    getMarker(Marker, req, res)
+})
+
+app.delete("/markers/:id", async (req,res) =>{
+    deleteMarker(Marker, req, res)
 })
