@@ -14,10 +14,8 @@ export async function loginFunction(req, res, model) {
     }else{ 
         const userData = {
             id: user._id,
-            username: user.username,
-            profilePic: user.profilePic,
-            memberSince: user.memberSince
         }
+        console.log(userData);
         console.log('LOGGED IN');
         return res.status(200).json({
             message: 'LOGGED IN',
