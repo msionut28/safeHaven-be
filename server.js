@@ -50,6 +50,28 @@ app.get("/GetReviews", async (req, res) => {
     getReview(req, res, Reviews)
   })
 
+app.delete("/DeleteReview/:id", async (req, res) => {
+    const reviewId = req.params.id;
+    const userId = req.user.id; 
+
+    try {
+        const review = await Reviews.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ message: 'Review not found' });
+        }
+
+        if (review.userId.toString() !== userId) {
+            return res.status(403).json({ message: 'You are not authorized to delete this review' });
+        }
+
+        await review.remove();
+        res.status(200).json({ message: 'Review deleted successfully' });
+    } catch (error) {
+        console.error('Failed to delete review:', error);
+        res.status(500).json({ message: 'Failed to delete review' });
+    }
+});
+
 //Endpoints for chat Engine .io
 
 app.post("/authenticate", async (req, res) => {
