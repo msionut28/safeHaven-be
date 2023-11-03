@@ -101,6 +101,6 @@ router.delete("/markers/:id", async (req,res) =>{
     deleteMarker(Marker, req, res)
 })
 
-api.use('/', router)
+api.use('/api', router)
 
 export const handler = serverless(api)
