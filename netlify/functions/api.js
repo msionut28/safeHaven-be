@@ -4,17 +4,17 @@ import express, {Router} from 'express';
 import mongoose from 'mongoose';
 import serverless from 'serverless-http';
 import 'dotenv/config';
-import { individualUser } from './ctrls/individualUser.js';
-import { userSchema } from './schemas/userSchema.js';
-import { userRegister } from './ctrls/userCreate.js'
-import { reviewSchema } from './schemas/reviewSchema.js';
-import { addReview, getReview } from './ctrls/reviewFunctions.js';
-import { authenticateChat, chatLogin } from './ctrls/chatEngine.js';
-import { loginFunction } from './ctrls/userLogin.js';
-import { addMarker } from './ctrls/markerFunction.js';
-import { markerSchema } from './schemas/markers.js';
-import { deleteMarker } from './ctrls/markerFunction.js';
-import { getMarker } from './ctrls/markerFunction.js';
+import { individualUser } from '../../ctrls/individualUser.js';
+import { userSchema } from '../../schemas/userSchema.js';
+import { userRegister } from '../../ctrls/userCreate.js'
+import { reviewSchema } from '../../schemas/reviewSchema.js';
+import { addReview, getReview } from '../../ctrls/reviewFunctions.js';
+import { authenticateChat, chatLogin } from '../../ctrls/chatEngine.js';
+import { loginFunction } from '../../ctrls/userLogin.js';
+import { addMarker } from '../../ctrls/markerFunction.js';
+import { markerSchema } from '../../schemas/markers.js';
+import { deleteMarker } from '../../ctrls/markerFunction.js';
+import { getMarker } from '../../ctrls/markerFunction.js';
 
 const api = express()
 api.use(cors({ origin: true }))
