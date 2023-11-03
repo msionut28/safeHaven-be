@@ -10,6 +10,10 @@ import { reviewSchema } from './schemas/reviewSchema.js';
 import { addReview, getReview } from './ctrls/reviewFunctions.js';
 import { authenticateChat, chatLogin } from './ctrls/chatEngine.js';
 import { loginFunction } from './ctrls/userLogin.js';
+import { addMarker } from './ctrls/markerFunction.js';
+import { markerSchema } from './schemas/markers.js';
+import { deleteMarker } from './ctrls/markerFunction.js';
+import { getMarker } from './ctrls/markerFunction.js';
 // import Reviews from './models/review.js'; 
 
 //*APP SETUP
@@ -35,6 +39,7 @@ const CHAT_ENGINE_PROJECT_ID= "4c61fca9-e537-418a-a97c-5759ecafb802"
 //* MODELS
 const Reviews = mongoose.model("Review", reviewSchema)
 const userAdded = mongoose.model("User", userSchema)
+const Marker = mongoose.model('Marker', markerSchema);
 
 //* Reviews Endpoints
 app.post("/AddReview", async (req, res) => {
@@ -44,6 +49,28 @@ app.post("/AddReview", async (req, res) => {
 app.get("/GetReviews", async (req, res) => {
     getReview(req, res, Reviews)
   })
+
+app.delete("/DeleteReview/:id", async (req, res) => {
+    const reviewId = req.params.id;
+    const userId = req.user.id; 
+
+    try {
+        const review = await Reviews.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ message: 'Review not found' });
+        }
+
+        if (review.userId.toString() !== userId) {
+            return res.status(403).json({ message: 'You are not authorized to delete this review' });
+        }
+
+        await review.remove();
+        res.status(200).json({ message: 'Review deleted successfully' });
+    } catch (error) {
+        console.error('Failed to delete review:', error);
+        res.status(500).json({ message: 'Failed to delete review' });
+    }
+});
 
 //Endpoints for chat Engine .io
 
@@ -67,4 +94,16 @@ app.post("/login/credential", async(req, res) => {
 
 app.get("/user/:id", async (req, res) => {
     individualUser(userAdded, req, res)
+})
+
+//Map Markers Endpoints
+app.post("/markers", async (req, res) => {
+    addMarker(Marker,req, res)
+})
+app.get("/markers", async (req, res) => {
+    getMarker(Marker, req, res)
+})
+
+app.delete("/markers/:id", async (req,res) =>{
+    deleteMarker(Marker, req, res)
 })
